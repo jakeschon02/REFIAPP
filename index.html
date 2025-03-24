@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>REFIAPP</title>
+    <!-- Font Awesome (na ikony koša a i-čko) -->
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+            integrity="sha512-xh6l0QxS0lWKH4g5W4MBPjW1+SGBaK5vN+83K2dwpX0ZScE6/lCNi1sHfP8Ebl8aExHxdB6fH6fhe4K8E1us/g=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+    />
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div class="container">
+    <h1 class="main-title">REFIAPP</h1>
+
+    <!-- Taby na prepínanie režimov -->
+    <ul id="modeTabs" class="tabs">
+        <li class="tab-item is-active" data-mode="nova-hypoteka">Nová hypotéka</li>
+        <li class="tab-item" data-mode="refinancovanie">Čisté refinancovanie</li>
+        <li class="tab-item" data-mode="navysenie">Refinancovanie + navýšenie</li>
+    </ul>
+
+    <div class="calc-wrapper">
+        <!-- ĽAVÝ PANEL: Vstupy -->
+        <div class="calc-left">
+            <!-- REŽIM: Nová hypotéka -->
+            <div id="mode-nova-hypoteka" class="mode-section">
+                <h2 class="section-title">Nová hypotéka</h2>
+                <!-- Dynamické bloky pre žiadateľov -->
+                <div id="applicants"></div>
+                <button class="btn btn-add" id="addApplicant">Pridať žiadateľa</button>
+                <hr class="divider" />
+                <!-- Bonusy a ďalšie údaje -->
+                <h3 class="section-subtitle">Bonusy a ďalšie údaje</h3>
+                <div class="input-group">
+                    <label for="childrenUnder15">Počet detí do 15 rokov:</label>
+                    <input id="childrenUnder15" type="number" value="0" min="0" />
+                </div>
+                <div class="input-group">
+                    <label for="children15plus">Počet detí nad 15 rokov:</label>
+                    <input id="children15plus" type="number" value="0" min="0" />
+                </div>
+                <div class="input-group">
+                    <label for="mealVoucher">Príjem zo stravných lístkov/diet (mesačne):</label>
+                    <input id="mealVoucher" type="number" value="0" min="0" />
+                </div>
+                <hr class="divider" />
+                <button class="btn btn-primary" id="calculate">Vypočítať</button>
+                <button class="btn btn-danger" id="reset">Reset</button>
+            </div>
+
+            <!-- REŽIM: Čisté refinancovanie -->
+            <div id="mode-refinancovanie" class="mode-section" style="display: none;">
+                <h2 class="section-title">Čisté refinancovanie</h2>
+                <!-- Dynamické bloky pre úvery -->
+                <div id="loansContainer"></div>
+                <button class="btn btn-add" id="addLoan">Pridať úver</button>
+                <hr class="divider" />
+                <!-- Ďalšie vstupy -->
+                <div class="input-group">
+                    <label for="desiredTerm">Splatnosť hypotéky (roky):</label>
+                    <input id="desiredTerm" type="number" value="25" min="1" />
+                </div>
+                <div class="input-group">
+                    <label for="propertyValue">Hodnota nehnuteľnosti:</label>
+                    <input id="propertyValue" type="number" value="0" min="0" />
+                </div>
+                <div class="input-group">
+                    <label><input type="checkbox" id="employmentStatus" /> Mám aktuálny pracovný pomer (TPP/SZČO)</label>
+                </div>
+                <hr class="divider" />
+                <button class="btn btn-primary" id="calculateRefi">Vypočítať refinancovanie</button>
+                <button class="btn btn-danger" id="resetRefi">Reset</button>
+            </div>
+
+            <!-- REŽIM: Refinancovanie + navýšenie (placeholder) -->
+            <div id="mode-navysenie" class="mode-section" style="display: none;">
+                <h2 class="section-title">Refinancovanie + navýšenie</h2>
+                <p class="placeholder-text">
+                    Táto funkcia je zatiaľ v príprave.
+                </p>
+            </div>
+        </div>
+
+        <!-- PRAVÝ PANEL: Výsledky -->
+        <div class="calc-right">
+            <h2 class="results-title">Výsledky</h2>
+
+            <!-- Skupina pre Novú hypotéku (pri Čistom refinancovaní sa skryje) -->
+            <div id="novaHypotekaResults">
+                <div class="result-item">
+                    <span class="result-label">Mesačná splátka:</span>
+                    <span class="result-value" id="resultMonthly">0 €</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">DTSI:</span>
+                    <span class="result-value" id="resultDTSI">0 €</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">DTI:</span>
+                    <span class="result-value" id="resultDTI">0 €</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Finálna hypotéka:</span>
+                    <span class="result-value" id="resultFinal">0 €</span>
+                </div>
+            </div>
+
+            <!-- Nadpis pre porovnanie bánk -->
+            <h3 class="section-subtitle" id="bankOffersTitle">Porovnanie bánk</h3>
+
+            <!-- Tu sa budú zobrazovať kartičky s bankami -->
+            <div id="bankOffersContainer" class="bank-cards"></div>
+        </div>
+    </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

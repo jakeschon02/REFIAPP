@@ -1,0 +1,329 @@
+/* RESET ZÁKLADNÝCH ŠTÝLOV */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #fff;
+    color: #000;
+}
+
+/* HLAVNÝ KONTAJNER */
+.container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+/* HLAVNÝ NADPIS */
+.main-title {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+/* TABY */
+.tabs {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    margin-bottom: 30px;
+}
+
+.tab-item {
+    padding: 10px 20px;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    margin: 0 2px;
+    background-color: #f8f8f8;
+    transition: background-color 0.2s;
+}
+
+.tab-item:hover {
+    background-color: #e5e5e5;
+}
+
+.tab-item.is-active {
+    background-color: #000;
+    color: #fff;
+    border-color: #000;
+}
+
+/* OBAL PRE ĽAVÝ A PRAVÝ PANEL */
+.calc-wrapper {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+/* ĽAVÝ PANEL */
+.calc-left {
+    flex: 1;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 20px;
+}
+
+.section-title {
+    font-size: 1.25rem;
+    margin-bottom: 15px;
+}
+
+.section-subtitle {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    margin-top: 15px;
+}
+
+.divider {
+    margin: 20px 0;
+    border: none;
+    border-top: 1px solid #ccc;
+}
+
+.placeholder-text {
+    color: #666;
+    font-size: 0.95rem;
+}
+
+/* VSTUPNÉ SKUPINY */
+.input-group {
+    margin-bottom: 15px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.input-group input,
+.input-group select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+}
+
+/* TLAČIDLÁ */
+.btn {
+    display: inline-block;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    margin-right: 10px;
+}
+
+.btn-add {
+    background-color: #000;
+    color: #fff;
+    margin-top: 10px;
+}
+
+.btn-add:hover {
+    opacity: 0.9;
+}
+
+.btn-primary {
+    background-color: #000;
+    color: #fff;
+}
+
+.btn-primary:hover {
+    opacity: 0.9;
+}
+
+.btn-danger {
+    background-color: #e00;
+    color: #fff;
+}
+
+.btn-danger:hover {
+    opacity: 0.9;
+}
+
+/* PRAVÝ PANEL (VÝSLEDKY) */
+.calc-right {
+    flex: 1;
+    background-color: #000;
+    color: #fff;
+    border: 1px solid #000;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.results-title {
+    font-size: 1.25rem;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.result-item {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.result-label {
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.result-value {
+    font-size: 1rem;
+    font-weight: normal;
+}
+
+/* KARTIČKY BÁNK PRE REFINANCOVANIE */
+.bank-cards {
+    margin-top: 15px;
+    width: 100%;
+}
+
+.bank-card {
+    background-color: #fff;
+    color: #000;
+    margin-bottom: 15px;
+    border-radius: 6px;
+    padding: 15px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.bank-card-left {
+    display: flex;
+    align-items: center;
+}
+
+.bank-card-icon {
+    width: 40px;
+    height: 40px;
+    background-color: #ddd;
+    border-radius: 4px;
+    margin-right: 10px;
+}
+
+.bank-card-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.bank-name {
+    font-weight: bold;
+    font-size: 1rem;
+    margin-bottom: 4px;
+}
+
+.bank-info {
+    font-size: 0.9rem;
+    color: #333;
+}
+
+.bank-card-right {
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.bank-rate {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.bank-monthly {
+    font-size: 1rem;
+    margin-bottom: 10px;
+}
+
+.btn-refinance {
+    background-color: #000;
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-refinance:hover {
+    opacity: 0.9;
+}
+
+.bank-status-error {
+    color: #e00;
+    font-weight: 600;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+}
+
+.bank-status-error i {
+    margin-left: 6px;
+    cursor: pointer;
+    color: #555;
+}
+
+.bank-status-error i:hover {
+    color: #000;
+}
+
+/* BLOKY ÚVEROV (pre refinancovanie) */
+.loan-box {
+    margin-bottom: 1rem;
+    position: relative;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.delete-loan {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: transparent;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    color: #999;
+}
+
+.delete-loan:hover {
+    color: #000;
+}
+
+/* BLOKY ŽIADATEĽOV (pre novú hypotéku) */
+.applicant-box {
+    margin-bottom: 1rem;
+    position: relative;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.delete-applicant {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: transparent;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    color: #999;
+}
+
+.delete-applicant:hover {
+    color: #000;
+}
