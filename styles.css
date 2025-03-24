@@ -1,4 +1,4 @@
-/* RESET ZÁKLADNÝCH ŠTÝLOV */
+/* RESET */
 * {
     margin: 0;
     padding: 0;
@@ -11,21 +11,30 @@ body {
     color: #000;
 }
 
-/* HLAVNÝ KONTAJNER */
 .container {
     max-width: 1200px;
     margin: 40px auto;
     padding: 20px;
 }
 
-.main-title {
+/* Horná sekcia s pilulkou REFIAPP a tabmi */
+.header-section {
     text-align: center;
-    margin-bottom: 30px;
-    font-size: 2rem;
-    font-weight: bold;
+    margin-bottom: 20px;
 }
 
-/* TABY */
+/* Pilulka REFIAPP */
+.logo-pill {
+    display: inline-block;
+    padding: 15px 40px;
+    background-color: #000;
+    color: #fff;
+    border-radius: 999px;
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+/* Taby */
 .tabs {
     display: flex;
     justify-content: center;
@@ -37,7 +46,8 @@ body {
     padding: 10px 20px;
     cursor: pointer;
     border: 1px solid #ccc;
-    margin: 0 2px;
+    border-radius: 999px;
+    margin: 0 10px;
     background-color: #f8f8f8;
     transition: background-color 0.2s;
 }
@@ -52,32 +62,31 @@ body {
     border-color: #000;
 }
 
-/* VYPNUŤ dvojstĺpcové rozloženie – budú pod sebou */
+/* Wrapper pre sekcie (pod sebou) */
 .calc-wrapper {
-    display: block;  /* Namiesto flex, aby sekcie šli pod seba */
+    display: block; /* pod sebou */
 }
 
-/* ĽAVÝ PANEL (zadávanie údajov) */
+/* Každá sekcia vstupov (Nová hypotéka, Refinancovanie, atď.) */
 .calc-left {
     width: 100%;
     background-color: #fff;
     border: 1px solid #ccc;
     padding: 20px;
-    margin-bottom: 20px; /* aby sa oddelil od .calc-right */
+    margin-bottom: 20px;
 }
 
-/* PRAVÝ PANEL (VÝSLEDKY) */
+/* Čierny box pre výsledky */
 .calc-right {
     width: 100%;
     background-color: #000;
     color: #fff;
     border: 1px solid #000;
     padding: 20px;
-    /* display: block -> stačí takto, nech je to klasický blok */
     display: block;
 }
 
-/* Sekcie a nadpisy */
+/* Nadpisy a podnadpisy */
 .section-title {
     font-size: 1.25rem;
     margin-bottom: 15px;
@@ -89,18 +98,18 @@ body {
     margin-top: 15px;
 }
 
+.placeholder-text {
+    color: #666;
+    font-size: 0.95rem;
+}
+
 .divider {
     margin: 20px 0;
     border: none;
     border-top: 1px solid #ccc;
 }
 
-.placeholder-text {
-    color: #666;
-    font-size: 0.95rem;
-}
-
-/* VSTUPNÉ SKUPINY */
+/* Vstupné skupiny */
 .input-group {
     margin-bottom: 15px;
 }
@@ -117,12 +126,12 @@ body {
     border-radius: 4px;
 }
 
-/* TLAČIDLÁ */
+/* Tlačidlá */
 .btn {
     display: inline-block;
     padding: 10px 16px;
     border: none;
-    border-radius: 4px;
+    border-radius: 999px;
     cursor: pointer;
     font-size: 0.95rem;
     margin-right: 10px;
@@ -140,8 +149,6 @@ body {
 .btn-primary {
     background-color: #000;
     color: #fff;
-    position: relative;
-    overflow: hidden;
 }
 .btn-primary:hover {
     opacity: 0.9;
@@ -149,8 +156,6 @@ body {
 .btn-danger {
     background-color: #e00;
     color: #fff;
-    position: relative;
-    overflow: hidden;
 }
 .btn-danger:hover {
     opacity: 0.9;
@@ -169,24 +174,22 @@ body {
     from { transform: rotate(0deg); }
     to { transform: rotate(360deg); }
 }
-.animate-reset {
+.animate-reset i {
     animation: rotate 0.6s linear;
 }
 
-/* Výsledky (v čiernom boxe) */
+/* Výsledky (zobrazia sa v .calc-right) */
 .results-title {
     font-size: 1.25rem;
     margin-bottom: 10px;
     font-weight: bold;
 }
-
-/* Každá položka (label + value) roztiahnutá odľava doprava */
 .result-item {
     display: flex;
     justify-content: space-between;
     width: 100%;
     margin-bottom: 10px;
-    padding: 0 10px; /* aby text nebol nalepený na okraj */
+    padding: 0 10px;
 }
 .result-label {
     font-weight: 600;
@@ -197,7 +200,7 @@ body {
     font-weight: normal;
 }
 
-/* Kartičky bánk pre refinancovanie */
+/* Bankové kartičky */
 .bank-card {
     background-color: #fff;
     color: #000;
@@ -209,7 +212,6 @@ body {
     align-items: center;
     justify-content: space-between;
 }
-
 .bank-card-left {
     display: flex;
     align-items: center;
@@ -231,7 +233,6 @@ body {
     font-size: 1rem;
     margin-bottom: 4px;
 }
-/* Stredná sekcia – centrovaná */
 .bank-card-center {
     display: flex;
     flex-direction: column;
@@ -283,7 +284,7 @@ body {
     color: #000;
 }
 
-/* BLOKY ÚVEROV (pre refinancovanie) */
+/* Úverové a žiadateľské boxy */
 .loan-box {
     margin-bottom: 1rem;
     position: relative;
@@ -304,8 +305,6 @@ body {
 .delete-loan:hover {
     color: #000;
 }
-
-/* BLOKY ŽIADATEĽOV (pre novú hypotéku) */
 .applicant-box {
     margin-bottom: 1rem;
     position: relative;
@@ -327,16 +326,14 @@ body {
     color: #000;
 }
 
-/* RESPONSIVE STYLY pre mobilné zariadenia */
+/* Responsivita pre mobily */
 @media (max-width: 768px) {
-    /* Teraz to ostáva block, taktiež mobil to spraví pod seba */
     .calc-wrapper {
         display: block;
     }
     .calc-left, .calc-right {
         width: 100%;
     }
-
     .bank-card {
         flex-direction: column;
         align-items: center;
