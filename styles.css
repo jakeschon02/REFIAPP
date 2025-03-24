@@ -327,3 +327,41 @@ body {
 .delete-applicant:hover {
     color: #000;
 }
+
+.bank-card {
+    background-color: #fff;
+    color: #000;
+    margin-bottom: 15px;
+    border-radius: 6px;
+    padding: 15px;
+    position: relative;
+    display: flex;
+    align-items: center;  /* zvislé centrovanie obsahu */
+    justify-content: space-between; /* priestor medzi left, center, right */
+}
+
+/* Ľavá sekcia */
+.bank-card-left {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+}
+
+/* Stredná sekcia */
+.bank-card-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;    /* zarovnáme úrok a splátku do stredu horizontálne */
+    justify-content: center; /* zvislé centrovanie */
+    flex: 1;                /* aby center sekcia zaberala dostupné miesto */
+    text-align: center;     /* text v strede */
+    margin-right: 10px;
+}
+
+/* Pravá sekcia */
+.bank-card-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    text-align: right;
+}
