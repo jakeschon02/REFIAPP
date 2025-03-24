@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>REFIAPP</title>
-    <!-- Font Awesome pre ikonky (user, trash, atď.) -->
+    <!-- Font Awesome pre ikonky -->
     <link
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
@@ -17,7 +17,7 @@
 <body>
 <div class="container">
 
-    <!-- Horná sekcia s pilulkou REFIAPP a zaoblenými tabmi -->
+    <!-- Horná sekcia: logo a taby -->
     <div class="header-section">
         <h1 class="logo-pill">REFIAPP</h1>
         <ul class="tabs">
@@ -27,10 +27,10 @@
         </ul>
     </div>
 
-    <!-- Wrapper, kde je všetko pod sebou (nie vedľa seba) -->
+    <!-- Obsah – sekcie pod sebou -->
     <div class="calc-wrapper">
 
-        <!-- Režim: Nová hypotéka -->
+        <!-- Sekcia pre Novú hypotéku -->
         <div id="mode-nova-hypoteka" class="calc-left mode-section">
             <h2 class="section-title">Nová hypotéka</h2>
 
@@ -41,7 +41,7 @@
             </button>
 
             <hr class="divider" />
-            <!-- Bonusy a ďalšie údaje -->
+            <!-- Bonusy a dodatočné údaje -->
             <h3 class="section-subtitle">Bonusy a ďalšie údaje</h3>
             <div class="input-group">
                 <label for="childrenUnder15">Počet detí do 15 rokov:</label>
@@ -65,7 +65,7 @@
             </button>
         </div>
 
-        <!-- Režim: Čisté refinancovanie -->
+        <!-- Sekcia pre Čisté refinancovanie -->
         <div id="mode-refinancovanie" class="calc-left mode-section" style="display: none;">
             <h2 class="section-title">Čisté refinancovanie</h2>
 
@@ -76,7 +76,7 @@
             </button>
 
             <hr class="divider" />
-            <!-- Ďalšie vstupy -->
+            <!-- Dodatočné vstupy -->
             <div class="input-group">
                 <label for="desiredTerm">Splatnosť hypotéky (roky):</label>
                 <input id="desiredTerm" type="number" value="25" min="1" />
@@ -101,7 +101,7 @@
             </button>
         </div>
 
-        <!-- Režim: Refinancovanie + navýšenie -->
+        <!-- Sekcia pre Refinancovanie + navýšenie (placeholder) -->
         <div id="mode-navysenie" class="calc-left mode-section" style="display: none;">
             <h2 class="section-title">Refinancovanie + navýšenie</h2>
             <p class="placeholder-text">
@@ -109,11 +109,11 @@
             </p>
         </div>
 
-        <!-- Čierny box s výsledkami -->
+        <!-- Čierny box s výsledkami (celá šírka) -->
         <div class="calc-right">
             <h2 class="results-title">Výsledky</h2>
 
-            <!-- Výsledky pre novú hypotéku -->
+            <!-- Výsledky pre Novú hypotéku -->
             <div id="novaHypotekaResults">
                 <div class="result-item">
                     <span class="result-label">Mesačná splátka:</span>
@@ -133,7 +133,7 @@
                 </div>
             </div>
 
-            <!-- Nadpis pre porovnanie bánk (napr. v sekcii Čisté refinancovanie) -->
+            <!-- Nadpis pre porovnanie bánk -->
             <h3 class="section-subtitle" id="bankOffersTitle">Porovnanie bánk</h3>
 
             <!-- Kartičky s bankovými ponukami -->
