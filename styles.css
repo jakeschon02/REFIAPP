@@ -68,6 +68,20 @@ body {
     padding: 20px;
 }
 
+/* PRAVÝ PANEL (VÝSLEDKY) */
+.calc-right {
+    flex: 1;
+    background-color: #000;
+    color: #fff;
+    border: 1px solid #000;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+/* Sekcie a nadpisy */
 .section-title {
     font-size: 1.25rem;
     margin-bottom: 15px;
@@ -148,19 +162,7 @@ body {
     opacity: 0.9;
 }
 
-/* PRAVÝ PANEL (VÝSLEDKY) */
-.calc-right {
-    flex: 1;
-    background-color: #000;
-    color: #fff;
-    border: 1px solid #000;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
-}
-
+/* Výsledky a kartičky bánk */
 .results-title {
     font-size: 1.25rem;
     margin-bottom: 10px;
@@ -184,7 +186,7 @@ body {
     font-weight: normal;
 }
 
-/* KARTIČKY BÁNK PRE REFINANCOVANIE */
+/* Kartičky bánk pre refinancovanie */
 .bank-cards {
     margin-top: 15px;
     width: 100%;
@@ -205,6 +207,7 @@ body {
 .bank-card-left {
     display: flex;
     align-items: center;
+    margin-right: 10px;
 }
 
 .bank-card-icon {
@@ -226,16 +229,14 @@ body {
     margin-bottom: 4px;
 }
 
-.bank-info {
-    font-size: 0.9rem;
-    color: #333;
-}
-
-.bank-card-right {
-    text-align: right;
+.bank-card-center {
     display: flex;
     flex-direction: column;
-    align-items: flex-end;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    text-align: center;
+    margin-right: 10px;
 }
 
 .bank-rate {
@@ -247,6 +248,13 @@ body {
 .bank-monthly {
     font-size: 1rem;
     margin-bottom: 10px;
+}
+
+.bank-card-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    text-align: right;
 }
 
 .btn-refinance {
@@ -328,40 +336,27 @@ body {
     color: #000;
 }
 
-.bank-card {
-    background-color: #fff;
-    color: #000;
-    margin-bottom: 15px;
-    border-radius: 6px;
-    padding: 15px;
-    position: relative;
-    display: flex;
-    align-items: center;  /* zvislé centrovanie obsahu */
-    justify-content: space-between; /* priestor medzi left, center, right */
-}
+/* RESPONSIVE STYLY pre mobilné zariadenia */
+@media (max-width: 768px) {
+    .calc-wrapper {
+        flex-direction: column;
+    }
 
-/* Ľavá sekcia */
-.bank-card-left {
-    display: flex;
-    align-items: center;
-    margin-right: 10px;
-}
+    .calc-left, .calc-right {
+        width: 100%;
+    }
 
-/* Stredná sekcia */
-.bank-card-center {
-    display: flex;
-    flex-direction: column;
-    align-items: center;    /* zarovnáme úrok a splátku do stredu horizontálne */
-    justify-content: center; /* zvislé centrovanie */
-    flex: 1;                /* aby center sekcia zaberala dostupné miesto */
-    text-align: center;     /* text v strede */
-    margin-right: 10px;
-}
+    .bank-card {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
 
-/* Pravá sekcia */
-.bank-card-right {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    text-align: right;
+    .bank-card-left, .bank-card-center, .bank-card-right {
+        margin: 5px 0;
+    }
+
+    .bank-card-center {
+        margin-right: 0;
+    }
 }
