@@ -18,7 +18,6 @@ body {
     padding: 20px;
 }
 
-/* HLAVNÝ NADPIS */
 .main-title {
     text-align: center;
     margin-bottom: 30px;
@@ -53,32 +52,29 @@ body {
     border-color: #000;
 }
 
-/* OBAL PRE ĽAVÝ A PRAVÝ PANEL */
+/* VYPNUŤ dvojstĺpcové rozloženie – budú pod sebou */
 .calc-wrapper {
-    display: flex;
-    flex-direction: row;
-    gap: 20px;
+    display: block;  /* Namiesto flex, aby sekcie šli pod seba */
 }
 
-/* ĽAVÝ PANEL */
+/* ĽAVÝ PANEL (zadávanie údajov) */
 .calc-left {
-    flex: 1;
+    width: 100%;
     background-color: #fff;
     border: 1px solid #ccc;
     padding: 20px;
+    margin-bottom: 20px; /* aby sa oddelil od .calc-right */
 }
 
 /* PRAVÝ PANEL (VÝSLEDKY) */
 .calc-right {
-    flex: 1;
+    width: 100%;
     background-color: #000;
     color: #fff;
     border: 1px solid #000;
     padding: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
+    /* display: block -> stačí takto, nech je to klasický blok */
+    display: block;
 }
 
 /* Sekcie a nadpisy */
@@ -108,13 +104,11 @@ body {
 .input-group {
     margin-bottom: 15px;
 }
-
 .input-group label {
     display: block;
     margin-bottom: 5px;
     font-weight: 600;
 }
-
 .input-group input,
 .input-group select {
     width: 100%;
@@ -132,66 +126,78 @@ body {
     cursor: pointer;
     font-size: 0.95rem;
     margin-right: 10px;
+    position: relative;
+    overflow: hidden;
 }
-
 .btn-add {
     background-color: #000;
     color: #fff;
     margin-top: 10px;
 }
-
 .btn-add:hover {
     opacity: 0.9;
 }
-
 .btn-primary {
     background-color: #000;
     color: #fff;
+    position: relative;
+    overflow: hidden;
 }
-
 .btn-primary:hover {
     opacity: 0.9;
 }
-
 .btn-danger {
     background-color: #e00;
     color: #fff;
+    position: relative;
+    overflow: hidden;
 }
-
 .btn-danger:hover {
     opacity: 0.9;
 }
 
-/* Výsledky a kartičky bánk */
+/* Animácie tlačidiel */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+.animate-calc {
+    animation: pulse 0.6s ease-in-out;
+}
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+.animate-reset {
+    animation: rotate 0.6s linear;
+}
+
+/* Výsledky (v čiernom boxe) */
 .results-title {
     font-size: 1.25rem;
     margin-bottom: 10px;
     font-weight: bold;
 }
 
+/* Každá položka (label + value) roztiahnutá odľava doprava */
 .result-item {
     display: flex;
     justify-content: space-between;
     width: 100%;
     margin-bottom: 10px;
+    padding: 0 10px; /* aby text nebol nalepený na okraj */
 }
-
 .result-label {
     font-weight: 600;
     font-size: 1rem;
 }
-
 .result-value {
     font-size: 1rem;
     font-weight: normal;
 }
 
 /* Kartičky bánk pre refinancovanie */
-.bank-cards {
-    margin-top: 15px;
-    width: 100%;
-}
-
 .bank-card {
     background-color: #fff;
     color: #000;
@@ -209,7 +215,6 @@ body {
     align-items: center;
     margin-right: 10px;
 }
-
 .bank-card-icon {
     width: 40px;
     height: 40px;
@@ -217,18 +222,16 @@ body {
     border-radius: 4px;
     margin-right: 10px;
 }
-
 .bank-card-content {
     display: flex;
     flex-direction: column;
 }
-
 .bank-name {
     font-weight: bold;
     font-size: 1rem;
     margin-bottom: 4px;
 }
-
+/* Stredná sekcia – centrovaná */
 .bank-card-center {
     display: flex;
     flex-direction: column;
@@ -238,25 +241,21 @@ body {
     text-align: center;
     margin-right: 10px;
 }
-
 .bank-rate {
     font-size: 1.1rem;
     font-weight: 600;
     margin-bottom: 5px;
 }
-
 .bank-monthly {
     font-size: 1rem;
     margin-bottom: 10px;
 }
-
 .bank-card-right {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
     text-align: right;
 }
-
 .btn-refinance {
     background-color: #000;
     color: #fff;
@@ -265,11 +264,9 @@ body {
     border: none;
     cursor: pointer;
 }
-
 .btn-refinance:hover {
     opacity: 0.9;
 }
-
 .bank-status-error {
     color: #e00;
     font-weight: 600;
@@ -277,13 +274,11 @@ body {
     display: flex;
     align-items: center;
 }
-
 .bank-status-error i {
     margin-left: 6px;
     cursor: pointer;
     color: #555;
 }
-
 .bank-status-error i:hover {
     color: #000;
 }
@@ -296,7 +291,6 @@ body {
     border: 1px solid #ccc;
     border-radius: 4px;
 }
-
 .delete-loan {
     position: absolute;
     top: 8px;
@@ -307,7 +301,6 @@ body {
     cursor: pointer;
     color: #999;
 }
-
 .delete-loan:hover {
     color: #000;
 }
@@ -320,7 +313,6 @@ body {
     border: 1px solid #ccc;
     border-radius: 4px;
 }
-
 .delete-applicant {
     position: absolute;
     top: 8px;
@@ -331,17 +323,16 @@ body {
     cursor: pointer;
     color: #999;
 }
-
 .delete-applicant:hover {
     color: #000;
 }
 
 /* RESPONSIVE STYLY pre mobilné zariadenia */
 @media (max-width: 768px) {
+    /* Teraz to ostáva block, taktiež mobil to spraví pod seba */
     .calc-wrapper {
-        flex-direction: column;
+        display: block;
     }
-
     .calc-left, .calc-right {
         width: 100%;
     }
@@ -351,11 +342,9 @@ body {
         align-items: center;
         text-align: center;
     }
-
     .bank-card-left, .bank-card-center, .bank-card-right {
         margin: 5px 0;
     }
-
     .bank-card-center {
         margin-right: 0;
     }

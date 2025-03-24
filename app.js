@@ -25,17 +25,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (mode === 'nova-hypoteka') {
                 modeNova.style.display = 'block';
-                // Zobrazíme výsledky Novej hypotéky
                 novaHypotekaResults.style.display = 'block';
                 bankOffersTitle.textContent = "Porovnanie bánk";
             } else if (mode === 'refinancovanie') {
                 modeRefi.style.display = 'block';
-                // Skryjeme výsledky Novej hypotéky
                 novaHypotekaResults.style.display = 'none';
                 bankOffersTitle.textContent = "Porovnanie bánk";
             } else if (mode === 'navysenie') {
                 modeNavy.style.display = 'block';
-                // Pre placeholder - rovnako skryjeme
                 novaHypotekaResults.style.display = 'none';
                 bankOffersTitle.textContent = "Porovnanie bánk";
             }
@@ -53,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function() {
         applicantDiv.className = 'applicant-box';
         applicantDiv.innerHTML = `
       <button class="delete-applicant" title="Odstrániť žiadateľa">
-        <i class="fa fa-trash"></i>
+        <i class="fa fa-user-minus"></i>
       </button>
       <div class="input-group">
         <label>Meno:</label>
@@ -109,6 +106,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const resultFinal = document.getElementById('resultFinal');
 
     calculateBtn.addEventListener('click', () => {
+        // Pridanie animácie pre tlačidlo "Vypočítať"
+        calculateBtn.classList.add('animate-calc');
+        setTimeout(() => {
+            calculateBtn.classList.remove('animate-calc');
+        }, 1000);
+
         const childrenUnder15 = parseFloat(document.getElementById('childrenUnder15').value) || 0;
         const children15plus = parseFloat(document.getElementById('children15plus').value) || 0;
         const mealVoucher = parseFloat(document.getElementById('mealVoucher').value) || 0;
@@ -170,6 +173,12 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     resetBtn.addEventListener('click', () => {
+        // Animácia pre tlačidlo "Reset"
+        resetBtn.classList.add('animate-reset');
+        setTimeout(() => {
+            resetBtn.classList.remove('animate-reset');
+        }, 500);
+
         applicantsContainer.innerHTML = '';
         document.getElementById('childrenUnder15').value = 0;
         document.getElementById('children15plus').value = 0;
@@ -259,7 +268,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         console.log("Property Value:", propertyValue, "Employment:", hasEmployment);
 
-        // Banky + minDuration
+        // Banky s minimálnou dobou splácania
         const refiBanks = [
             { name: "SLSP", rate: 4.09, minDuration: 12 },
             { name: "VÚB", rate: (totalRemaining > 200000 ? 3.89 : (totalRemaining >= 100000 ? 3.99 : 4.09)), minDuration: 12 },
@@ -271,33 +280,24 @@ document.addEventListener('DOMContentLoaded', function() {
             { name: "mBank", rate: 3.79, minDuration: 12 }
         ];
 
-        // Vyčisti staré karty
         bankOffersContainer.innerHTML = '';
-
         let eligibleCount = 0;
 
         refiBanks.forEach(bank => {
-            // Dôvody, prečo môže / nemôže vyhovieť
             const reasons = [];
-
-            // 1) Minimálna doba splácania
             if (minDurationCategory < bank.minDuration) {
                 reasons.push("krátkej dobe splácania");
             }
 
-            // Vypočítaj novú splátku
             const newMonthly = calcMonthlyPayment(totalRemaining, bank.rate, termMonths);
-
-            // 2) Porovnanie so súčasnou splátkou
             let qualifies = true;
+
             if (minDurationCategory < 12) {
-                // Pod 12 mesiacov -> musí byť nová splátka nižšia
                 if (newMonthly >= totalCurrentPayment) {
                     reasons.push("vyššej mesačnej splátke oproti aktuálnej");
                     qualifies = false;
                 }
             } else {
-                // Prima môže tolerovať +20%
                 if (bank.name === "Prima") {
                     if (newMonthly > totalCurrentPayment * 1.20) {
                         reasons.push("vyššej mesačnej splátke oproti aktuálnej");
@@ -315,11 +315,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 qualifies = false;
             }
 
-            // Vytvor kartičku (bank-card)
+            // Vytvorenie kartičky
             const card = document.createElement('div');
             card.className = 'bank-card';
 
-            // Ľavá sekcia
+            // Ľavá sekcia: logo a názov banky
             const cardLeft = document.createElement('div');
             cardLeft.className = 'bank-card-left';
             const iconDiv = document.createElement('div');
@@ -333,18 +333,16 @@ document.addEventListener('DOMContentLoaded', function() {
             cardLeft.appendChild(iconDiv);
             cardLeft.appendChild(contentDiv);
 
-            // Stredná sekcia
+            // Stredná sekcia: úrok a splátka
             const cardCenter = document.createElement('div');
             cardCenter.className = 'bank-card-center';
 
-            // Pravá sekcia
+            // Pravá sekcia: tlačidlo alebo chybová hláška
             const cardRight = document.createElement('div');
             cardRight.className = 'bank-card-right';
 
             if (qualifies) {
                 eligibleCount++;
-
-                // Stred - úrok a splátka
                 const rateEl = document.createElement('div');
                 rateEl.className = 'bank-rate';
                 rateEl.textContent = `${bank.rate.toFixed(2)} %`;
@@ -356,7 +354,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 cardCenter.appendChild(rateEl);
                 cardCenter.appendChild(monthlyEl);
 
-                // Pravá sekcia - tlačidlo
                 const btnRefi = document.createElement('button');
                 btnRefi.className = 'btn-refinance';
                 btnRefi.textContent = "Chcem refinancovať";
@@ -365,12 +362,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
                 cardRight.appendChild(btnRefi);
             } else {
-                // Nedá sa refinancovať
                 const statusEl = document.createElement('div');
                 statusEl.className = 'bank-status-error';
                 statusEl.textContent = "nedá sa refinancovať bez overenia výšky príjmu";
 
-                // Info ikonka s tooltipom
                 const infoIcon = document.createElement('i');
                 infoIcon.className = "fa fa-info-circle";
                 infoIcon.title = `Kvôli ${reasons.join(" a ")}`;
@@ -379,18 +374,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 cardRight.appendChild(statusEl);
             }
 
-            // Poskladáme kartičku
             card.appendChild(cardLeft);
             card.appendChild(cardCenter);
             card.appendChild(cardRight);
-
             bankOffersContainer.appendChild(card);
         });
 
         if (eligibleCount === 0) {
             alert("V tejto situácii nevyhovuje žiadna banka. Je potrebné doplniť údaje o finančnej situácii.");
         } else {
-            // Koľko bánk sme vôbec zobrazili (tie, čo spĺňali min. splácanie)
             const displayedBanksCount = refiBanks.filter(b => minDurationCategory >= b.minDuration).length;
             if (eligibleCount < displayedBanksCount) {
                 alert("Nie všetky banky ponúkajú refinancovanie za výhodnejších podmienok. Pre ponuky vo zvyšných bankách je potrebné overiť výšku príjmu a doplniť dodatočné údaje.");
