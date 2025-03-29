@@ -1,226 +1,26 @@
 document.addEventListener('DOMContentLoaded', function() {
     /*******************************
-     * Prepínanie režimov (taby)
-     *******************************/
-    const modeTabs = document.querySelector('.tabs');
-    const tabItems = modeTabs.querySelectorAll('.tab-item');
-    const modeNova = document.getElementById('mode-nova-hypoteka');
-    const modeRefi = document.getElementById('mode-refinancovanie');
-    const modeNavy = document.getElementById('mode-navysenie');
-
-    // Pre Novú hypotéku (zobrazenie výsledkov)
-    const novaHypotekaResults = document.getElementById('novaHypotekaResults');
-    const bankOffersTitle = document.getElementById('bankOffersTitle');
-
-    tabItems.forEach(tab => {
-        tab.addEventListener('click', () => {
-            // Odstrániť .is-active zo všetkých tabov
-            tabItems.forEach(t => t.classList.remove('is-active'));
-            // Pridať .is-active na aktuálny tab
-            tab.classList.add('is-active');
-
-            const mode = tab.getAttribute('data-mode');
-            // Skryť všetky sekcie
-            modeNova.style.display = 'none';
-            modeRefi.style.display = 'none';
-            modeNavy.style.display = 'none';
-
-            if (mode === 'nova-hypoteka') {
-                modeNova.style.display = 'block';
-                novaHypotekaResults.style.display = 'block';
-                bankOffersTitle.textContent = "Porovnanie bánk";
-            } else if (mode === 'refinancovanie') {
-                modeRefi.style.display = 'block';
-                // Skryť novú hypotéku
-                novaHypotekaResults.style.display = 'none';
-                bankOffersTitle.textContent = "Porovnanie bánk";
-            } else if (mode === 'navysenie') {
-                modeNavy.style.display = 'block';
-                novaHypotekaResults.style.display = 'none';
-                bankOffersTitle.textContent = "Porovnanie bánk";
-            }
-        });
-    });
-
-    /*******************************
-     * Nová hypotéka
-     *******************************/
-    const addApplicantBtn = document.getElementById('addApplicant');
-    const applicantsContainer = document.getElementById('applicants');
-
-    addApplicantBtn.addEventListener('click', () => {
-        const applicantDiv = document.createElement('div');
-        applicantDiv.className = 'applicant-box';
-        applicantDiv.innerHTML = `
-      <button class="delete-applicant" title="Odstrániť žiadateľa">
-        <i class="fa fa-user-minus"></i>
-      </button>
-      <div class="input-group">
-        <label>Meno:</label>
-        <input type="text" class="applicant-name" placeholder="Meno">
-      </div>
-      <div class="input-group">
-        <label>Vek:</label>
-        <input type="number" class="applicant-age" placeholder="Vek">
-      </div>
-      <div class="input-group">
-        <label>Typ príjmu:</label>
-        <select class="applicant-type">
-          <option value="TPP">TPP (zamestnanec)</option>
-          <option value="SZČO">SZČO</option>
-          <option value="sro">s.r.o.</option>
-        </select>
-      </div>
-      <div class="input-group income-field" data-type="TPP">
-        <label>Mesačný čistý príjem:</label>
-        <input type="number" class="applicant-income" placeholder="Mesačný príjem">
-      </div>
-      <div class="input-group income-field" data-type="SZČO" style="display:none;">
-        <label>Ročné tržby:</label>
-        <input type="number" class="applicant-revenue" placeholder="Ročné tržby">
-      </div>
-      <div class="input-group income-field" data-type="sro" style="display:none;">
-        <label>Zisk po zdanení:</label>
-        <input type="number" class="applicant-profit" placeholder="Zisk po zdanení">
-      </div>
-    `;
-        // Odstránenie žiadateľa
-        const deleteBtn = applicantDiv.querySelector('.delete-applicant');
-        deleteBtn.addEventListener('click', () => {
-            applicantDiv.remove();
-        });
-
-        // Prepínanie typov príjmu
-        const typeSelect = applicantDiv.querySelector('.applicant-type');
-        typeSelect.addEventListener('change', () => {
-            const selected = typeSelect.value;
-            applicantDiv.querySelectorAll('.income-field').forEach(field => {
-                field.style.display = (field.getAttribute('data-type') === selected) ? 'block' : 'none';
-            });
-        });
-
-        applicantsContainer.appendChild(applicantDiv);
-    });
-
-    const calculateBtn = document.getElementById('calculate');
-    const resetBtn = document.getElementById('reset');
-    const resultMonthly = document.getElementById('resultMonthly');
-    const resultDTSI = document.getElementById('resultDTSI');
-    const resultDTI = document.getElementById('resultDTI');
-    const resultFinal = document.getElementById('resultFinal');
-
-    calculateBtn.addEventListener('click', () => {
-        // Animácia "pulz"
-        calculateBtn.classList.add('animate-calc');
-        setTimeout(() => {
-            calculateBtn.classList.remove('animate-calc');
-        }, 600);
-
-        const childrenUnder15 = parseFloat(document.getElementById('childrenUnder15').value) || 0;
-        const children15plus = parseFloat(document.getElementById('children15plus').value) || 0;
-        const mealVoucher = parseFloat(document.getElementById('mealVoucher').value) || 0;
-
-        const applicantDivs = applicantsContainer.querySelectorAll('.applicant-box');
-        if (applicantDivs.length === 0) {
-            alert('Prosím, pridajte aspoň jedného žiadateľa.');
-            return;
-        }
-
-        let totalEffectiveIncome = 0;
-        let multipliers = [];
-
-        applicantDivs.forEach(div => {
-            const type = div.querySelector('.applicant-type').value;
-            const age = parseFloat(div.querySelector('.applicant-age').value) || 0;
-            let effectiveIncome = 0;
-
-            if (type === 'TPP') {
-                effectiveIncome = parseFloat(div.querySelector('.applicant-income').value) || 0;
-            } else if (type === 'SZČO') {
-                const revenue = parseFloat(div.querySelector('.applicant-revenue').value) || 0;
-                const deduction = (revenue <= 48441.43) ? 0.19 : 0.25;
-                effectiveIncome = (revenue * (1 - deduction)) / 12;
-            } else if (type === 'sro') {
-                const profit = parseFloat(div.querySelector('.applicant-profit').value) || 0;
-                let taxRate = 0.10;
-                if (profit > 100000 && profit < 5000000) {
-                    taxRate = 0.21;
-                } else if (profit >= 5000000) {
-                    taxRate = 0.24;
-                }
-                effectiveIncome = (profit * (1 - taxRate)) / 12;
-            }
-
-            totalEffectiveIncome += effectiveIncome;
-
-            // DTI multiplikátor
-            let multiplier = 8;
-            if (age >= 41) {
-                multiplier = 8 - ((age - 40) * 0.25);
-                if (multiplier < 3) multiplier = 3;
-            }
-            multipliers.push(multiplier);
-        });
-
-        // Bonusy
-        const bonus = (childrenUnder15 * 100) + (children15plus * 50) + mealVoucher;
-        const totalMonthlyIncome = totalEffectiveIncome + bonus;
-
-        // Životné minimum
-        const numApplicants = applicantDivs.length;
-        const totalChildren = childrenUnder15 + children15plus;
-        const lifeMinimum = 280 + ((numApplicants - 1) * 200) + (totalChildren * 125);
-
-        // Dostupná splátka
-        const availableInstallment = totalMonthlyIncome - lifeMinimum;
-        const monthlyInstallment = availableInstallment * 0.6; // 60%
-
-        // DTSI
-        const dtsi = monthlyInstallment * 168.1812;
-
-        // DTI
-        const combinedAnnualIncome = totalMonthlyIncome * 12;
-        const minMultiplier = Math.min(...multipliers);
-        const dti = minMultiplier * combinedAnnualIncome;
-
-        const finalMortgage = Math.floor(Math.min(dtsi, dti));
-
-        resultMonthly.textContent = monthlyInstallment.toFixed(2) + ' €';
-        resultDTSI.textContent = dtsi.toFixed(2) + ' €';
-        resultDTI.textContent = dti.toFixed(2) + ' €';
-        resultFinal.textContent = finalMortgage.toFixed(0) + ' €';
-    });
-
-    resetBtn.addEventListener('click', () => {
-        // Animácia "rotate" pre ikonu
-        resetBtn.classList.add('animate-reset');
-        setTimeout(() => {
-            resetBtn.classList.remove('animate-reset');
-        }, 600);
-
-        applicantsContainer.innerHTML = '';
-        document.getElementById('childrenUnder15').value = 0;
-        document.getElementById('children15plus').value = 0;
-        document.getElementById('mealVoucher').value = 0;
-        resultMonthly.textContent = '0 €';
-        resultDTSI.textContent = '0 €';
-        resultDTI.textContent = '0 €';
-        resultFinal.textContent = '0 €';
-    });
-
-    /*******************************
-     * Čisté refinancovanie
+     * Úverové boxy – Čisté refinancovanie
      *******************************/
     const loansContainer = document.getElementById('loansContainer');
     const addLoanBtn = document.getElementById('addLoan');
 
-    addLoanBtn.addEventListener('click', () => {
+    function createLoanBox() {
         const loanDiv = document.createElement('div');
         loanDiv.className = 'loan-box';
         loanDiv.innerHTML = `
       <button class="delete-loan" title="Odstrániť úver">
         <i class="fa fa-trash"></i>
       </button>
+      <div class="input-group">
+        <label>Typ úveru:</label>
+        <select class="loan-type">
+          <option value="hypoteka">Hypotéka</option>
+          <option value="spotrebny">Spotrebný úver</option>
+          <option value="leasing">Leasing</option>
+          <option value="iny">Iný úver</option>
+        </select>
+      </div>
       <div class="input-group">
         <label>Zostatok úveru (EUR):</label>
         <input type="number" class="loan-balance" placeholder="Zostatok">
@@ -245,8 +45,20 @@ document.addEventListener('DOMContentLoaded', function() {
             loanDiv.remove();
         });
         loansContainer.appendChild(loanDiv);
+    }
+
+    // Predvolene vytvor jeden úverový box
+    if (loansContainer.children.length === 0) {
+        createLoanBox();
+    }
+
+    addLoanBtn.addEventListener('click', () => {
+        createLoanBox();
     });
 
+    /*******************************
+     * Výpočet bankových ponúk pre refinancovanie
+     *******************************/
     const calculateRefiBtn = document.getElementById('calculateRefi');
     const resetRefiBtn = document.getElementById('resetRefi');
     const bankOffersContainer = document.getElementById('bankOffersContainer');
@@ -257,6 +69,7 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('Prosím, pridajte aspoň jeden úver.');
             return;
         }
+
         let totalRemaining = 0;
         let totalCurrentPayment = 0;
         let minDurationCategory = 999;
@@ -282,16 +95,21 @@ document.addEventListener('DOMContentLoaded', function() {
         const propertyValue = parseFloat(document.getElementById('propertyValue').value) || 0;
         const hasEmployment = document.getElementById('employmentStatus').checked;
 
-        // Banky s minDuration
+        // Nový vstup: Typ nehnuteľnosti (Byt alebo Dom)
+        const propertyType = document.querySelector('input[name="propertyType"]:checked').value;
+
+        console.log("Property Value:", propertyValue, "Employment:", hasEmployment, "Property Type:", propertyType);
+
+        // Definícia bánk s LTV pre Byt a Dom
         const refiBanks = [
-            { name: "SLSP", rate: 4.09, minDuration: 12 },
-            { name: "VÚB", rate: (totalRemaining > 200000 ? 3.89 : (totalRemaining >= 100000 ? 3.99 : 4.09)), minDuration: 12 },
-            { name: "Tatra", rate: 3.65, minDuration: 10 },
-            { name: "ČSOB", rate: 3.45, minDuration: 12 },
-            { name: "Prima", rate: 3.30, minDuration: 16 },
-            { name: "Unicredit", rate: 3.69, minDuration: 18 },
-            { name: "365 banka", rate: 3.75, minDuration: 10 },
-            { name: "mBank", rate: 3.79, minDuration: 12 }
+            { name: "SLSP", rate: 4.09, minDuration: 12, ltvByt: 0.90, ltvDom: 0.90 },
+            { name: "VÚB", rate: (totalRemaining > 200000 ? 3.89 : (totalRemaining >= 100000 ? 3.99 : 4.09)), minDuration: 12, ltvByt: 0.80, ltvDom: 0.70 },
+            { name: "Tatra", rate: 3.65, minDuration: 10, ltvByt: 0.90, ltvDom: 0.90 },
+            { name: "ČSOB", rate: 3.45, minDuration: 12, ltvByt: 0.90, ltvDom: 0.90 },
+            { name: "Prima", rate: 3.30, minDuration: 16, ltvByt: 1.00, ltvDom: 1.00 },
+            { name: "Unicredit", rate: 3.69, minDuration: 18, ltvByt: 0.80, ltvDom: 0.80 },
+            { name: "365 banka", rate: 3.75, minDuration: 10, ltvByt: 0.80, ltvDom: 0.80 },
+            { name: "mBank", rate: 3.79, minDuration: 12, ltvByt: 0.80, ltvDom: 0.80 }
         ];
 
         bankOffersContainer.innerHTML = '';
@@ -299,44 +117,46 @@ document.addEventListener('DOMContentLoaded', function() {
 
         refiBanks.forEach(bank => {
             const reasons = [];
-            // Minimálna doba splácania
+            // Kontrola minimálnej doby splácania
             if (minDurationCategory < bank.minDuration) {
                 reasons.push("krátkej dobe splácania");
             }
 
-            // Nová mesačná splátka
-            const newMonthly = calcMonthlyPayment(totalRemaining, bank.rate, termMonths);
-            let qualifies = true;
+            // LTV kontrola
+            const allowedMax = propertyType === "dom"
+                ? Math.min(propertyValue * bank.ltvDom, bank.name === "Unicredit" ? 180000 : Infinity)
+                : Math.min(propertyValue * bank.ltvByt, bank.name === "Unicredit" ? 180000 : Infinity);
+            if (totalRemaining > allowedMax) {
+                reasons.push("prekročený LTV");
+            }
 
-            // Porovnanie so súčasnou splátkou
+            // Výpočet novej mesačnej splátky
+            const newMonthly = calcMonthlyPayment(totalRemaining, bank.rate, termMonths);
+
+            // Kontrola mesačnej splátky oproti aktuálnej
             if (minDurationCategory < 12) {
                 if (newMonthly >= totalCurrentPayment) {
                     reasons.push("vyššej mesačnej splátke oproti aktuálnej");
-                    qualifies = false;
                 }
             } else {
                 if (bank.name === "Prima") {
                     if (newMonthly > totalCurrentPayment * 1.20) {
                         reasons.push("vyššej mesačnej splátke oproti aktuálnej");
-                        qualifies = false;
                     }
                 } else {
                     if (newMonthly >= totalCurrentPayment) {
                         reasons.push("vyššej mesačnej splátke oproti aktuálnej");
-                        qualifies = false;
                     }
                 }
             }
 
-            if (reasons.length > 0) {
-                qualifies = false;
-            }
+            let qualifies = reasons.length === 0;
 
-            // Vytvor kartičku
+            // Vytvorenie kartičky
             const card = document.createElement('div');
             card.className = 'bank-card';
 
-            // Ľavá sekcia
+            // Ľavá sekcia: názov banky
             const cardLeft = document.createElement('div');
             cardLeft.className = 'bank-card-left';
             const iconDiv = document.createElement('div');
@@ -350,11 +170,11 @@ document.addEventListener('DOMContentLoaded', function() {
             cardLeft.appendChild(iconDiv);
             cardLeft.appendChild(contentDiv);
 
-            // Stredná sekcia
+            // Stredná sekcia: úrok a splátka
             const cardCenter = document.createElement('div');
             cardCenter.className = 'bank-card-center';
 
-            // Pravá sekcia
+            // Pravá sekcia: tlačidlo alebo chybová hláška
             const cardRight = document.createElement('div');
             cardRight.className = 'bank-card-right';
 
@@ -408,14 +228,24 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     resetRefiBtn.addEventListener('click', () => {
+        resetRefiBtn.classList.add('animate-reset');
+        setTimeout(() => {
+            resetRefiBtn.classList.remove('animate-reset');
+        }, 600);
+
         loansContainer.innerHTML = '';
         document.getElementById('desiredTerm').value = 25;
         document.getElementById('propertyValue').value = 0;
         document.getElementById('employmentStatus').checked = false;
         bankOffersContainer.innerHTML = '';
+
+        // Ak je úverový box prázdny, vytvor jeden predvolene
+        if (loansContainer.children.length === 0) {
+            createLoanBox();
+        }
     });
 
-    // Výpočet anuitnej splátky
+    // Anuitný vzorec pre výpočet mesačnej splátky
     function calcMonthlyPayment(principal, annualRate, termMonths) {
         const r = annualRate / 100 / 12;
         return principal * (r / (1 - Math.pow(1 + r, -termMonths)));

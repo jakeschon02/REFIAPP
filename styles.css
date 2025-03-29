@@ -4,16 +4,17 @@
     padding: 0;
     box-sizing: border-box;
 }
-
 body {
     font-family: Arial, sans-serif;
     background-color: #fff;
     color: #000;
 }
 
+/* Kontajner – 66% šírky, centrovaný */
 .container {
-    max-width: 1200px;
-    margin: 20px auto;
+    width: 66%;
+    min-width: 300px;
+    margin: 40px auto;
     padding: 10px;
 }
 
@@ -23,62 +24,34 @@ body {
     margin-bottom: 20px;
 }
 
-/* Pilulka s názvom REFIAPP – menej zaoblená */
+/* Logo-pilulka s názvom */
 .logo-pill {
     display: inline-block;
     padding: 10px 30px;
     background-color: #000;
     color: #fff;
-    border-radius: 20px;  /* menej zaoblené */
-    font-size: 2rem;
+    border-radius: 20px;
+    font-size: 1.8rem;
     margin-bottom: 15px;
 }
 
-/* Taby – menej zaoblené */
-.tabs {
+/* Hlavný obsah – dve kolóny */
+.main-content {
     display: flex;
-    justify-content: center;
-    list-style: none;
-    margin-bottom: 20px;
+    gap: 10px;
 }
 
-.tab-item {
-    padding: 8px 16px;
-    cursor: pointer;
-    border: 1px solid #ccc;
-    border-radius: 10px;  /* znížený border-radius */
-    margin: 0 8px;
-    background-color: #f8f8f8;
-    transition: background-color 0.2s;
-}
-
-.tab-item:hover {
-    background-color: #e5e5e5;
-}
-
-.tab-item.is-active {
-    background-color: #000;
-    color: #fff;
-    border-color: #000;
-}
-
-/* Sekcie – teraz pod sebou */
-.calc-wrapper {
-    display: block;
-}
-
-/* Sekcia vstupov */
+/* Vstupný formulár (ľavý panel) */
 .calc-left {
-    width: 100%;
+    flex: 1;
     background-color: #fff;
     border: 1px solid #ccc;
     padding: 15px;
-    margin-bottom: 20px;
 }
 
-/* Čierny box s výsledkami – roztiahnutý cez celú šírku */
+/* Výsledkový čierny box (pravý panel) */
 .calc-right {
-    width: 100%;
+    flex: 1;
     background-color: #000;
     color: #fff;
     border: 1px solid #000;
@@ -87,38 +60,30 @@ body {
 }
 
 /* Nadpisy */
-.section-title {
+.section-title, .results-title {
     font-size: 1.25rem;
     margin-bottom: 10px;
 }
-
-.section-subtitle {
-    font-size: 1.1rem;
-    margin: 10px 0;
+.results-title {
+    font-weight: bold;
 }
 
+/* Oddelovače */
 .divider {
     margin: 20px 0;
     border: none;
     border-top: 1px solid #ccc;
 }
 
-.placeholder-text {
-    color: #666;
-    font-size: 0.95rem;
-}
-
 /* Vstupné skupiny */
 .input-group {
     margin-bottom: 10px;
 }
-
 .input-group label {
     display: block;
     margin-bottom: 5px;
     font-weight: 600;
 }
-
 .input-group input,
 .input-group select {
     width: 100%;
@@ -127,7 +92,7 @@ body {
     border-radius: 4px;
 }
 
-/* Tlačidlá – zaoblené menej */
+/* Tlačidlá – menej zaoblené */
 .btn {
     display: inline-block;
     padding: 10px 16px;
@@ -139,31 +104,25 @@ body {
     position: relative;
     overflow: hidden;
 }
-
 .btn-add {
     background-color: #000;
     color: #fff;
     margin-top: 10px;
 }
-
 .btn-add:hover {
     opacity: 0.9;
 }
-
 .btn-primary {
     background-color: #000;
     color: #fff;
 }
-
 .btn-primary:hover {
     opacity: 0.9;
 }
-
 .btn-danger {
     background-color: #e00;
     color: #fff;
 }
-
 .btn-danger:hover {
     opacity: 0.9;
 }
@@ -174,27 +133,18 @@ body {
     50% { transform: scale(1.1); }
     100% { transform: scale(1); }
 }
-
 .animate-calc {
     animation: pulse 0.6s ease-in-out;
 }
-
 @keyframes rotate {
     from { transform: rotate(0deg); }
     to { transform: rotate(360deg); }
 }
-
 .animate-reset i {
     animation: rotate 0.6s linear;
 }
 
 /* Výsledky – každý riadok */
-.results-title {
-    font-size: 1.25rem;
-    margin-bottom: 10px;
-    font-weight: bold;
-}
-
 .result-item {
     display: flex;
     justify-content: space-between;
@@ -202,18 +152,16 @@ body {
     margin-bottom: 10px;
     padding: 0 10px;
 }
-
 .result-label {
     font-weight: 600;
     font-size: 1rem;
 }
-
 .result-value {
     font-size: 1rem;
     font-weight: normal;
 }
 
-/* Bankové kartičky pre refinancovanie */
+/* Bankové kartičky */
 .bank-card {
     background-color: #fff;
     color: #000;
@@ -224,13 +172,11 @@ body {
     align-items: center;
     justify-content: space-between;
 }
-
 .bank-card-left {
     display: flex;
     align-items: center;
     margin-right: 10px;
 }
-
 .bank-card-icon {
     width: 40px;
     height: 40px;
@@ -238,19 +184,15 @@ body {
     border-radius: 4px;
     margin-right: 10px;
 }
-
 .bank-card-content {
     display: flex;
     flex-direction: column;
 }
-
 .bank-name {
     font-weight: bold;
     font-size: 1rem;
     margin-bottom: 4px;
 }
-
-/* Stredná sekcia – centrovaná */
 .bank-card-center {
     display: flex;
     flex-direction: column;
@@ -260,26 +202,21 @@ body {
     text-align: center;
     margin-right: 10px;
 }
-
 .bank-rate {
     font-size: 1.1rem;
     font-weight: 600;
     margin-bottom: 5px;
 }
-
 .bank-monthly {
     font-size: 1rem;
     margin-bottom: 10px;
 }
-
-/* Pravá sekcia – tlačidlo alebo chybová hláška */
 .bank-card-right {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
     text-align: right;
 }
-
 .btn-refinance {
     background-color: #000;
     color: #fff;
@@ -288,11 +225,9 @@ body {
     border: none;
     cursor: pointer;
 }
-
 .btn-refinance:hover {
     opacity: 0.9;
 }
-
 .bank-status-error {
     color: #e00;
     font-weight: 600;
@@ -300,13 +235,11 @@ body {
     display: flex;
     align-items: center;
 }
-
 .bank-status-error i {
     margin-left: 6px;
     cursor: pointer;
     color: #555;
 }
-
 .bank-status-error i:hover {
     color: #000;
 }
@@ -319,7 +252,6 @@ body {
     border-radius: 4px;
     position: relative;
 }
-
 .delete-loan {
     position: absolute;
     top: 8px;
@@ -330,42 +262,17 @@ body {
     cursor: pointer;
     color: #999;
 }
-
 .delete-loan:hover {
-    color: #000;
-}
-
-/* Žiadateľské boxy */
-.applicant-box {
-    margin-bottom: 1rem;
-    padding: 15px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    position: relative;
-}
-
-.delete-applicant {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    background: transparent;
-    border: none;
-    font-size: 1rem;
-    cursor: pointer;
-    color: #999;
-}
-
-.delete-applicant:hover {
     color: #000;
 }
 
 /* Responsivita */
 @media (max-width: 768px) {
     .container {
-        padding: 10px;
+        width: 90%;
     }
-    .calc-wrapper {
-        display: block;
+    .main-content {
+        flex-direction: column;
     }
     .calc-left, .calc-right {
         width: 100%;
