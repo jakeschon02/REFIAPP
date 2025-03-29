@@ -16,17 +16,18 @@
 </head>
 <body>
 <div class="container">
+
     <!-- Horná sekcia s názvom -->
     <div class="header-section">
         <h1 class="logo-pill">Refinančná Kalkulačka</h1>
     </div>
 
-    <!-- Hlavný obsah – dve kolóny: vstupy (ľavý panel) a výsledky (pravý panel) -->
+    <!-- Hlavný obsah: dve kolóny – vstupy a výsledky -->
     <div class="main-content">
 
-        <!-- Vstupný formulár pre Čisté refinancovanie -->
+        <!-- Vstupný formulár pre čisté refinancovanie -->
         <div class="calc-left">
-            <h2 class="section-title"></h2>
+            <h2 class="section-title">Zadaj údaje pre refinancovanie</h2>
 
             <!-- Úverové boxy (predvolene jeden) -->
             <div id="loansContainer"></div>
@@ -35,26 +36,31 @@
             </button>
 
             <hr class="divider" />
+
             <!-- Dodatočné vstupy -->
             <div class="input-group">
                 <label for="desiredTerm">Splatnosť hypotéky:</label>
                 <input id="desiredTerm" type="number" value="25" min="1" />
             </div>
-            <!-- Nová sekcia: Typ nehnuteľnosti -->
+
+            <!-- Nová sekcia: Typ nehnuteľnosti ako dropdown -->
             <div class="input-group">
-                <label>Typ nehnuteľnosti:</label>
-                <label><input type="radio" name="propertyType" value="byt" checked> Byt</label>
-                <label><input type="radio" name="propertyType" value="dom"> Dom</label>
+                <label for="propertyType">Typ nehnuteľnosti:</label>
+                <select id="propertyType">
+                    <option value="byt" selected>Byt</option>
+                    <option value="dom">Dom</option>
+                </select>
             </div>
+
             <div class="input-group">
-                <label for="propertyValue">Hodnota zakladanej nehnuteľnosti:</label>
+                <label for="propertyValue">Hodnota nehnuteľnosti:</label>
                 <input id="propertyValue" type="number" value="0" min="0" />
             </div>
-            <div class="input-group">
-                <label>
-                    <input type="checkbox" id="employmentStatus" />
-                    Mám aktuálny pracovný pomer (TPP/SZČO)
-                </label>
+
+            <!-- Upravený checkbox – inline -->
+            <div class="input-group inline">
+                <input type="checkbox" id="employmentStatus" />
+                <label for="employmentStatus">Mám aktuálny pracovný pomer</label>
             </div>
 
             <hr class="divider" />
@@ -66,9 +72,9 @@
             </button>
         </div>
 
-        <!-- Výsledkový čierny box – zobrazený na pravej strane -->
+        <!-- Výsledkový čierny box (pravý panel) -->
         <div class="calc-right">
-            <h2 class="results-title"></h2>
+            <h2 class="results-title">Výsledky</h2>
             <div id="bankOffersContainer"></div>
         </div>
 

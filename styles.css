@@ -24,7 +24,7 @@ body {
     margin-bottom: 20px;
 }
 
-/* Logo-pilulka s názvom */
+/* Logo-pilulka */
 .logo-pill {
     display: inline-block;
     padding: 10px 30px;
@@ -60,7 +60,8 @@ body {
 }
 
 /* Nadpisy */
-.section-title, .results-title {
+.section-title,
+.results-title {
     font-size: 1.25rem;
     margin-bottom: 10px;
 }
@@ -90,6 +91,12 @@ body {
     padding: 8px;
     border: 1px solid #aaa;
     border-radius: 4px;
+}
+/* Inline vstupná skupina – pre checkbox */
+.input-group.inline {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
 }
 
 /* Tlačidlá – menej zaoblené */
@@ -193,6 +200,7 @@ body {
     font-size: 1rem;
     margin-bottom: 4px;
 }
+/* Stredná sekcia – centrovaná */
 .bank-card-center {
     display: flex;
     flex-direction: column;
@@ -211,6 +219,7 @@ body {
     font-size: 1rem;
     margin-bottom: 10px;
 }
+/* Pravá sekcia – tlačidlo alebo hláška */
 .bank-card-right {
     display: flex;
     flex-direction: column;

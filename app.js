@@ -94,13 +94,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const termMonths = desiredTermYears * 12;
         const propertyValue = parseFloat(document.getElementById('propertyValue').value) || 0;
         const hasEmployment = document.getElementById('employmentStatus').checked;
-
-        // Nový vstup: Typ nehnuteľnosti (Byt alebo Dom)
-        const propertyType = document.querySelector('input[name="propertyType"]:checked').value;
+        // Získaj typ nehnuteľnosti z dropdownu
+        const propertyType = document.getElementById('propertyType').value;
 
         console.log("Property Value:", propertyValue, "Employment:", hasEmployment, "Property Type:", propertyType);
 
-        // Definícia bánk s LTV pre Byt a Dom
+        // Definícia bánk s LTV podmienkami pre Byt a Dom
         const refiBanks = [
             { name: "SLSP", rate: 4.09, minDuration: 12, ltvByt: 0.90, ltvDom: 0.90 },
             { name: "VÚB", rate: (totalRemaining > 200000 ? 3.89 : (totalRemaining >= 100000 ? 3.99 : 4.09)), minDuration: 12, ltvByt: 0.80, ltvDom: 0.70 },
@@ -122,15 +121,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 reasons.push("krátkej dobe splácania");
             }
 
-            // LTV kontrola
+            // Vypočítame maximálnu povolenú sumu podľa LTV
             const allowedMax = propertyType === "dom"
                 ? Math.min(propertyValue * bank.ltvDom, bank.name === "Unicredit" ? 180000 : Infinity)
                 : Math.min(propertyValue * bank.ltvByt, bank.name === "Unicredit" ? 180000 : Infinity);
+
             if (totalRemaining > allowedMax) {
                 reasons.push("prekročený LTV");
             }
 
-            // Výpočet novej mesačnej splátky
             const newMonthly = calcMonthlyPayment(totalRemaining, bank.rate, termMonths);
 
             // Kontrola mesačnej splátky oproti aktuálnej
@@ -152,7 +151,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             let qualifies = reasons.length === 0;
 
-            // Vytvorenie kartičky
+            // Vytvorenie kartičky pre banku
             const card = document.createElement('div');
             card.className = 'bank-card';
 
@@ -174,7 +173,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const cardCenter = document.createElement('div');
             cardCenter.className = 'bank-card-center';
 
-            // Pravá sekcia: tlačidlo alebo chybová hláška
+            // Pravá sekcia: tlačidlo alebo hláška
             const cardRight = document.createElement('div');
             cardRight.className = 'bank-card-right';
 
@@ -239,13 +238,11 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('employmentStatus').checked = false;
         bankOffersContainer.innerHTML = '';
 
-        // Ak je úverový box prázdny, vytvor jeden predvolene
         if (loansContainer.children.length === 0) {
             createLoanBox();
         }
     });
 
-    // Anuitný vzorec pre výpočet mesačnej splátky
     function calcMonthlyPayment(principal, annualRate, termMonths) {
         const r = annualRate / 100 / 12;
         return principal * (r / (1 - Math.pow(1 + r, -termMonths)));
