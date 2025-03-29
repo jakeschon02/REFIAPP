@@ -74,9 +74,9 @@ document.addEventListener('DOMContentLoaded', function() {
         let totalCurrentPayment = 0;
         let minDurationCategory = 999;
 
-        // Prepočítame aj súčty a počty podľa typu úveru
+        // Premenné pre typy úverov
         let totalHypoteka = 0, totalSpotrebny = 0, totalLeasing = 0;
-        let countLoans = 0, countHypoteka = 0, countSpotrebny = 0, countLeasing = 0, countIny = 0;
+        let countLoans = 0, countHypoteka = 0, countSpotrebny = 0, countLeasing = 0;
 
         loanDivs.forEach(div => {
             const balance = parseFloat(div.querySelector('.loan-balance').value) || 0;
@@ -92,8 +92,8 @@ document.addEventListener('DOMContentLoaded', function() {
             if (durationNum < minDurationCategory) minDurationCategory = durationNum;
             totalRemaining += balance;
             totalCurrentPayment += currentPayment;
-
             countLoans++;
+
             const type = div.querySelector('.loan-type').value;
             if (type === "hypoteka") {
                 totalHypoteka += balance;
@@ -104,8 +104,6 @@ document.addEventListener('DOMContentLoaded', function() {
             } else if (type === "leasing") {
                 totalLeasing += balance;
                 countLeasing++;
-            } else if (type === "iny") {
-                countIny++;
             }
         });
 
@@ -113,11 +111,11 @@ document.addEventListener('DOMContentLoaded', function() {
         const termMonths = desiredTermYears * 12;
         const propertyValue = parseFloat(document.getElementById('propertyValue').value) || 0;
         const hasEmployment = document.getElementById('employmentStatus').checked;
-        const propertyType = document.getElementById('propertyType').value;  // "byt" alebo "dom"
+        const propertyType = document.getElementById('propertyType').value; // "byt" alebo "dom"
 
         console.log("Property Value:", propertyValue, "Employment:", hasEmployment, "Property Type:", propertyType);
 
-        // Definícia bánk s LTV podmienkami – pre každý bankový objekt nastavíme aj LTV pre byt a dom
+        // Definícia bánk s LTV podmienkami
         const refiBanks = [
             { name: "SLSP", rate: 4.09, minDuration: 12, ltvByt: 0.90, ltvDom: 0.90 },
             { name: "VÚB", rate: (totalRemaining > 200000 ? 3.89 : (totalRemaining >= 100000 ? 3.99 : 4.09)), minDuration: 12, ltvByt: 0.80, ltvDom: 0.70 },
@@ -134,12 +132,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
         refiBanks.forEach(bank => {
             const reasons = [];
+
             // Kontrola minimálnej doby splácania
             if (minDurationCategory < bank.minDuration) {
                 reasons.push("krátkej dobe splácania");
             }
 
-            // LTV kontrola: vypočítame maximálnu povolenú sumu podľa typu nehnuteľnosti
+            // LTV kontrola: maximálna povolená suma
             const allowedMax = propertyType === "dom"
                 ? Math.min(propertyValue * bank.ltvDom, bank.name === "Unicredit" ? 180000 : Infinity)
                 : Math.min(propertyValue * bank.ltvByt, bank.name === "Unicredit" ? 180000 : Infinity);
@@ -147,16 +146,28 @@ document.addEventListener('DOMContentLoaded', function() {
                 reasons.push("prekročený LTV");
             }
 
-            // Extra podmienky pre typy úverov podľa banky
+            // Extra podmienky pre jednotlivé banky:
             if (bank.name === "VÚB") {
                 if (totalRemaining > 0) {
                     let ratioHyp = totalHypoteka / totalRemaining;
                     let ratioSpot = totalSpotrebny / totalRemaining;
-                    if (ratioHyp < 0.6) {
+                    if (ratioHyp < 0.60) {
                         reasons.push("podiel hypoték < 60%");
                     }
-                    if (ratioSpot > 0.4) {
+                    if (ratioSpot > 0.40) {
                         reasons.push("podiel spotrebných > 40%");
+                    }
+                }
+            }
+            if (bank.name === "Tatra") {
+                if (totalRemaining > 0) {
+                    let ratioHyp = totalHypoteka / totalRemaining;
+                    let ratioSpot = (totalRemaining - totalHypoteka) / totalRemaining;
+                    if (ratioHyp < 0.80) {
+                        reasons.push("secured ratio < 80%");
+                    }
+                    if (ratioSpot > 0.20) {
+                        reasons.push("unsecured ratio > 20%");
                     }
                 }
             }
@@ -164,19 +175,21 @@ document.addEventListener('DOMContentLoaded', function() {
                 reasons.push("ČSOB neumožňuje refinancovanie");
             }
             if (bank.name === "Prima") {
-                // Povolené: 1 až 3 hypotéky a maximálne 3 spotrebné úvery (ak kombinácia)
-                if (countHypoteka < 1 || countHypoteka > 3 || countSpotrebny > 3) {
-                    reasons.push("nesprávna kombinácia úverov");
+                // Pre Prima, vyžaduje sa minimálne 80% zabezpečených (hypoték)
+                if (totalRemaining > 0) {
+                    let ratioHyp = totalHypoteka / totalRemaining;
+                    if (ratioHyp < 0.80) {
+                        reasons.push("secured ratio < 80%");
+                    }
                 }
             }
             if (bank.name === "Unicredit") {
                 // Iba hypotekárne úvery
-                if (countHypoteka !== countLoans) {
+                if (countLoans !== countHypoteka) {
                     reasons.push("iba hypotekárne úvery povolené");
                 }
             }
             if (bank.name === "365 banka") {
-                // Maximálne 2 spotrebné úvery
                 if (countSpotrebny > 2) {
                     reasons.push("max. 2 spotrebné úvery");
                 }
@@ -193,7 +206,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Výpočet novej mesačnej splátky
             const newMonthly = calcMonthlyPayment(totalRemaining, bank.rate, termMonths);
 
-            // Kontrola mesačnej splátky oproti aktuálnej
+            // Kontrola mesačnej splátky oproti aktuálnej (tu ponechávame pôvodnú logiku)
             if (minDurationCategory < 12) {
                 if (newMonthly >= totalCurrentPayment) {
                     reasons.push("vyššej mesačnej splátke oproti aktuálnej");
@@ -230,7 +243,7 @@ document.addEventListener('DOMContentLoaded', function() {
             cardLeft.appendChild(iconDiv);
             cardLeft.appendChild(contentDiv);
 
-            // Stredná sekcia: úrok a splátka (centrované)
+            // Stredná sekcia: úrok a splátka
             const cardCenter = document.createElement('div');
             cardCenter.className = 'bank-card-center';
 
