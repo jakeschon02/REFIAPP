@@ -24,7 +24,7 @@
     <!-- Hlavný obsah: dve kolóny – vstupy a výsledky -->
     <div class="main-content">
 
-        <!-- Vstupný formulár pre čisté refinancovanie -->
+        <!-- Vstupný formulár pre Čisté refinancovanie -->
         <div class="calc-left">
             <h2 class="section-title"></h2>
 
@@ -41,7 +41,6 @@
                 <label for="desiredTerm">Splatnosť hypotéky:</label>
                 <input id="desiredTerm" type="number" value="25" min="1" />
             </div>
-            <!-- Nové pole: Typ nehnuteľnosti (dropdown) -->
             <div class="input-group">
                 <label for="propertyType">Typ nehnuteľnosti:</label>
                 <select id="propertyType">
@@ -53,6 +52,7 @@
                 <label for="propertyValue">Hodnota nehnuteľnosti:</label>
                 <input id="propertyValue" type="number" value="0" min="0" />
             </div>
+
             <!-- Upravený checkbox – inline -->
             <div class="input-group inline">
                 <input type="checkbox" id="employmentStatus" />
@@ -68,7 +68,7 @@
             </button>
         </div>
 
-        <!-- Výsledkový čierny box – zobrazený na pravej strane -->
+        <!-- Výsledkový čierny box (pravý panel) -->
         <div class="calc-right">
             <h2 class="results-title"></h2>
             <div id="bankOffersContainer"></div>

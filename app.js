@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const termMonths = desiredTermYears * 12;
         const propertyValue = parseFloat(document.getElementById('propertyValue').value) || 0;
         const hasEmployment = document.getElementById('employmentStatus').checked;
-        const propertyType = document.getElementById('propertyType').value; // "byt" alebo "dom"
+        const propertyType = document.getElementById('propertyType').value;  // "byt" alebo "dom"
 
         console.log("Property Value:", propertyValue, "Employment:", hasEmployment, "Property Type:", propertyType);
 
@@ -132,7 +132,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         refiBanks.forEach(bank => {
             const reasons = [];
-
             // Kontrola minimálnej doby splácania
             if (minDurationCategory < bank.minDuration) {
                 reasons.push("krátkej dobe splácania");
@@ -146,7 +145,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 reasons.push("prekročený LTV");
             }
 
-            // Extra podmienky pre jednotlivé banky:
+            // Extra podmienky pre banky
             if (bank.name === "VÚB") {
                 if (totalRemaining > 0) {
                     let ratioHyp = totalHypoteka / totalRemaining;
@@ -162,20 +161,19 @@ document.addEventListener('DOMContentLoaded', function() {
             if (bank.name === "Tatra") {
                 if (totalRemaining > 0) {
                     let ratioHyp = totalHypoteka / totalRemaining;
-                    let ratioSpot = (totalRemaining - totalHypoteka) / totalRemaining;
+                    let ratioUnsec = (totalRemaining - totalHypoteka) / totalRemaining;
                     if (ratioHyp < 0.80) {
                         reasons.push("secured ratio < 80%");
                     }
-                    if (ratioSpot > 0.20) {
+                    if (ratioUnsec > 0.20) {
                         reasons.push("unsecured ratio > 20%");
                     }
                 }
             }
             if (bank.name === "ČSOB") {
-                reasons.push("ČSOB neumožňuje refinancovanie");
+                reasons.push("ČSOB už neposkytuje nikdy čisté refinancovanie");
             }
             if (bank.name === "Prima") {
-                // Pre Prima, vyžaduje sa minimálne 80% zabezpečených (hypoték)
                 if (totalRemaining > 0) {
                     let ratioHyp = totalHypoteka / totalRemaining;
                     if (ratioHyp < 0.80) {
@@ -184,7 +182,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }
             if (bank.name === "Unicredit") {
-                // Iba hypotekárne úvery
                 if (countLoans !== countHypoteka) {
                     reasons.push("iba hypotekárne úvery povolené");
                 }
@@ -206,7 +203,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Výpočet novej mesačnej splátky
             const newMonthly = calcMonthlyPayment(totalRemaining, bank.rate, termMonths);
 
-            // Kontrola mesačnej splátky oproti aktuálnej (tu ponechávame pôvodnú logiku)
+            // Kontrola mesačnej splátky oproti aktuálnej
             if (minDurationCategory < 12) {
                 if (newMonthly >= totalCurrentPayment) {
                     reasons.push("vyššej mesačnej splátke oproti aktuálnej");
@@ -247,11 +244,12 @@ document.addEventListener('DOMContentLoaded', function() {
             const cardCenter = document.createElement('div');
             cardCenter.className = 'bank-card-center';
 
-            // Pravá sekcia: tlačidlo alebo hláška
+            // Pravá sekcia: tlačidlo alebo chybová hláška
             const cardRight = document.createElement('div');
             cardRight.className = 'bank-card-right';
 
             if (qualifies) {
+                // Banka vyhovuje
                 eligibleCount++;
                 const rateEl = document.createElement('div');
                 rateEl.className = 'bank-rate';
@@ -272,9 +270,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
                 cardRight.appendChild(btnRefi);
             } else {
+                // Banka nevyhovuje
                 const statusEl = document.createElement('div');
                 statusEl.className = 'bank-status-error';
-                statusEl.textContent = "nedá sa refinancovať bez overenia výšky príjmu";
+
+                if (bank.name === "ČSOB") {
+                    statusEl.textContent = "ČSOB už neposkytuje nikdy čisté refinancovanie";
+                } else {
+                    statusEl.textContent = "nedá sa refinancovať bez overenia výšky príjmu";
+                }
 
                 const infoIcon = document.createElement('i');
                 infoIcon.className = "fa fa-info-circle";

@@ -92,11 +92,16 @@ body {
     border: 1px solid #aaa;
     border-radius: 4px;
 }
-/* Inline skupina pre checkbox */
+/* Inline skupina pre checkbox – nech sa nezalamuje */
 .input-group.inline {
     display: inline-flex;
     align-items: center;
     gap: 5px;
+    white-space: nowrap; /* zabráni zalamovaniu na viac riadkov */
+}
+.input-group.inline label {
+    display: inline;
+    margin-bottom: 0;
 }
 
 /* Tlačidlá */
@@ -151,24 +156,7 @@ body {
     animation: rotate 0.6s linear;
 }
 
-/* Výsledky – každý riadok */
-.result-item {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    margin-bottom: 10px;
-    padding: 0 10px;
-}
-.result-label {
-    font-weight: 600;
-    font-size: 1rem;
-}
-.result-value {
-    font-size: 1rem;
-    font-weight: normal;
-}
-
-/* Bankové kartičky */
+/* Bankové kartičky (výsledky) */
 .bank-card {
     background-color: #fff;
     color: #000;
@@ -177,12 +165,16 @@ body {
     padding: 15px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start; /* fixné/minimálne šírky pre tri sekcie */
+    gap: 10px;
 }
+
+/* Sekcia vľavo (názov banky) – fixná šírka */
 .bank-card-left {
+    min-width: 120px; /* uprav podľa potreby */
     display: flex;
     align-items: center;
-    margin-right: 10px;
+    justify-content: flex-start;
 }
 .bank-card-icon {
     width: 40px;
@@ -200,16 +192,27 @@ body {
     font-size: 1rem;
     margin-bottom: 4px;
 }
-/* Stredná sekcia – centrovaná */
+
+/* Sekcia v strede (úrok, splátka) – flexibilná */
 .bank-card-center {
+    flex: 1;
+    text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    flex: 1;
-    text-align: center;
-    margin-right: 10px;
 }
+
+/* Sekcia vpravo (tlačidlo / chybová hláška) – fixná šírka */
+.bank-card-right {
+    min-width: 160px; /* uprav podľa potreby */
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+/* Štýl pre úrok a splátku */
 .bank-rate {
     font-size: 1.1rem;
     font-weight: 600;
@@ -219,13 +222,8 @@ body {
     font-size: 1rem;
     margin-bottom: 10px;
 }
-/* Pravá sekcia – tlačidlo alebo hláška */
-.bank-card-right {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    text-align: right;
-}
+
+/* Tlačidlo vpravo */
 .btn-refinance {
     background-color: #000;
     color: #fff;
@@ -237,12 +235,17 @@ body {
 .btn-refinance:hover {
     opacity: 0.9;
 }
+
+/* Chybová hláška vpravo */
 .bank-status-error {
     color: #e00;
     font-weight: 600;
     margin-bottom: 5px;
-    display: flex;
+    display: inline-flex; /* inline-flex, aby ikona bola vedľa textu */
     align-items: center;
+    justify-content: flex-end;
+    width: 100%;
+    text-align: right;
 }
 .bank-status-error i {
     margin-left: 6px;
@@ -275,7 +278,7 @@ body {
     color: #000;
 }
 
-/* Responsivita */
+/* RESPONSIVE */
 @media (max-width: 768px) {
     .container {
         width: 90%;
@@ -288,13 +291,15 @@ body {
     }
     .bank-card {
         flex-direction: column;
-        align-items: center;
-        text-align: center;
+        align-items: flex-start;
+        text-align: left;
     }
     .bank-card-left, .bank-card-center, .bank-card-right {
+        width: 100%;
+        min-width: auto;
         margin: 5px 0;
     }
     .bank-card-center {
-        margin-right: 0;
+        align-items: flex-start;
     }
 }
