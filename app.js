@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
         </select>
       </div>
       <div class="input-group">
-        <label>Zostatok úveru (EUR):</label>
+        <label>Zostatok úveru:</label>
         <input type="number" class="loan-balance" placeholder="Zostatok">
       </div>
       <div class="input-group">
@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
         </select>
       </div>
       <div class="input-group">
-        <label>Aktuálna mesačná splátka (EUR):</label>
+        <label>Aktuálna mesačná splátka:</label>
         <input type="number" class="loan-current-payment" placeholder="Splátka">
       </div>
     `;
