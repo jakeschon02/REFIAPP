@@ -74,6 +74,10 @@ document.addEventListener('DOMContentLoaded', function() {
         let totalCurrentPayment = 0;
         let minDurationCategory = 999;
 
+        // Prepočítame aj súčty a počty podľa typu úveru
+        let totalHypoteka = 0, totalSpotrebny = 0, totalLeasing = 0;
+        let countLoans = 0, countHypoteka = 0, countSpotrebny = 0, countLeasing = 0, countIny = 0;
+
         loanDivs.forEach(div => {
             const balance = parseFloat(div.querySelector('.loan-balance').value) || 0;
             const currentPayment = parseFloat(div.querySelector('.loan-current-payment').value) || 0;
@@ -88,18 +92,32 @@ document.addEventListener('DOMContentLoaded', function() {
             if (durationNum < minDurationCategory) minDurationCategory = durationNum;
             totalRemaining += balance;
             totalCurrentPayment += currentPayment;
+
+            countLoans++;
+            const type = div.querySelector('.loan-type').value;
+            if (type === "hypoteka") {
+                totalHypoteka += balance;
+                countHypoteka++;
+            } else if (type === "spotrebny") {
+                totalSpotrebny += balance;
+                countSpotrebny++;
+            } else if (type === "leasing") {
+                totalLeasing += balance;
+                countLeasing++;
+            } else if (type === "iny") {
+                countIny++;
+            }
         });
 
         const desiredTermYears = parseFloat(document.getElementById('desiredTerm').value) || 25;
         const termMonths = desiredTermYears * 12;
         const propertyValue = parseFloat(document.getElementById('propertyValue').value) || 0;
         const hasEmployment = document.getElementById('employmentStatus').checked;
-        // Získaj typ nehnuteľnosti z dropdownu
-        const propertyType = document.getElementById('propertyType').value;
+        const propertyType = document.getElementById('propertyType').value;  // "byt" alebo "dom"
 
         console.log("Property Value:", propertyValue, "Employment:", hasEmployment, "Property Type:", propertyType);
 
-        // Definícia bánk s LTV podmienkami pre Byt a Dom
+        // Definícia bánk s LTV podmienkami – pre každý bankový objekt nastavíme aj LTV pre byt a dom
         const refiBanks = [
             { name: "SLSP", rate: 4.09, minDuration: 12, ltvByt: 0.90, ltvDom: 0.90 },
             { name: "VÚB", rate: (totalRemaining > 200000 ? 3.89 : (totalRemaining >= 100000 ? 3.99 : 4.09)), minDuration: 12, ltvByt: 0.80, ltvDom: 0.70 },
@@ -121,15 +139,58 @@ document.addEventListener('DOMContentLoaded', function() {
                 reasons.push("krátkej dobe splácania");
             }
 
-            // Vypočítame maximálnu povolenú sumu podľa LTV
+            // LTV kontrola: vypočítame maximálnu povolenú sumu podľa typu nehnuteľnosti
             const allowedMax = propertyType === "dom"
                 ? Math.min(propertyValue * bank.ltvDom, bank.name === "Unicredit" ? 180000 : Infinity)
                 : Math.min(propertyValue * bank.ltvByt, bank.name === "Unicredit" ? 180000 : Infinity);
-
             if (totalRemaining > allowedMax) {
                 reasons.push("prekročený LTV");
             }
 
+            // Extra podmienky pre typy úverov podľa banky
+            if (bank.name === "VÚB") {
+                if (totalRemaining > 0) {
+                    let ratioHyp = totalHypoteka / totalRemaining;
+                    let ratioSpot = totalSpotrebny / totalRemaining;
+                    if (ratioHyp < 0.6) {
+                        reasons.push("podiel hypoték < 60%");
+                    }
+                    if (ratioSpot > 0.4) {
+                        reasons.push("podiel spotrebných > 40%");
+                    }
+                }
+            }
+            if (bank.name === "ČSOB") {
+                reasons.push("ČSOB neumožňuje refinancovanie");
+            }
+            if (bank.name === "Prima") {
+                // Povolené: 1 až 3 hypotéky a maximálne 3 spotrebné úvery (ak kombinácia)
+                if (countHypoteka < 1 || countHypoteka > 3 || countSpotrebny > 3) {
+                    reasons.push("nesprávna kombinácia úverov");
+                }
+            }
+            if (bank.name === "Unicredit") {
+                // Iba hypotekárne úvery
+                if (countHypoteka !== countLoans) {
+                    reasons.push("iba hypotekárne úvery povolené");
+                }
+            }
+            if (bank.name === "365 banka") {
+                // Maximálne 2 spotrebné úvery
+                if (countSpotrebny > 2) {
+                    reasons.push("max. 2 spotrebné úvery");
+                }
+            }
+            if (bank.name === "mBank") {
+                if (countLoans > 5) {
+                    reasons.push("max. 5 úverov");
+                }
+                if (totalRemaining > 0 && ((totalSpotrebny + totalLeasing) / totalRemaining > 0.30)) {
+                    reasons.push("spotrebné a leasing > 30%");
+                }
+            }
+
+            // Výpočet novej mesačnej splátky
             const newMonthly = calcMonthlyPayment(totalRemaining, bank.rate, termMonths);
 
             // Kontrola mesačnej splátky oproti aktuálnej
@@ -169,7 +230,7 @@ document.addEventListener('DOMContentLoaded', function() {
             cardLeft.appendChild(iconDiv);
             cardLeft.appendChild(contentDiv);
 
-            // Stredná sekcia: úrok a splátka
+            // Stredná sekcia: úrok a splátka (centrované)
             const cardCenter = document.createElement('div');
             cardCenter.className = 'bank-card-center';
 

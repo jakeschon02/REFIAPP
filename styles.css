@@ -92,7 +92,7 @@ body {
     border: 1px solid #aaa;
     border-radius: 4px;
 }
-/* Inline vstupná skupina – pre checkbox */
+/* Inline skupina pre checkbox */
 .input-group.inline {
     display: inline-flex;
     align-items: center;
