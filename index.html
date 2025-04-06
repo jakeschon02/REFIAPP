@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Refinančná Kalkulačka</title>
-    <!-- Font Awesome pre ikonky -->
+    <!-- Font Awesome pre ikonky (ak chceš použiť neskôr) -->
     <link
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
@@ -24,14 +24,17 @@
     <!-- Hlavný obsah: dve kolóny – vstupy a výsledky -->
     <div class="main-content">
 
-        <!-- Vstupný formulár pre Čisté refinancovanie -->
+        <!-- Vstupný formulár pre čisté refinancovanie -->
         <div class="calc-left">
-            <h2 class="section-title"></h2>
+            <h2 class="section-title">Zadaj údaje pre refinancovanie</h2>
 
             <!-- Úverové boxy (predvolene jeden) -->
             <div id="loansContainer"></div>
             <button class="btn btn-add" id="addLoan">
                 <i class="fa fa-plus"></i> Pridať úver
+            </button>
+            <button class="btn btn-danger" id="clearLoans">
+                <i class="fa fa-trash"></i> Vymazať všetky úvery
             </button>
 
             <hr class="divider" />
@@ -52,8 +55,7 @@
                 <label for="propertyValue">Hodnota nehnuteľnosti:</label>
                 <input id="propertyValue" type="number" value="0" min="0" />
             </div>
-
-            <!-- Upravený checkbox – inline -->
+            <!-- Inline checkbox -->
             <div class="input-group inline">
                 <input type="checkbox" id="employmentStatus" />
                 <label for="employmentStatus">Mám aktuálny pracovný pomer</label>
@@ -70,7 +72,7 @@
 
         <!-- Výsledkový čierny box (pravý panel) -->
         <div class="calc-right">
-            <h2 class="results-title"></h2>
+            <h2 class="results-title">Výsledky</h2>
             <div id="bankOffersContainer"></div>
         </div>
 

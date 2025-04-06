@@ -92,12 +92,12 @@ body {
     border: 1px solid #aaa;
     border-radius: 4px;
 }
-/* Inline skupina pre checkbox – nech sa nezalamuje */
+/* Inline skupina pre checkbox – zabráni zalamovaniu */
 .input-group.inline {
     display: inline-flex;
     align-items: center;
     gap: 5px;
-    white-space: nowrap; /* zabráni zalamovaniu na viac riadkov */
+    white-space: nowrap;
 }
 .input-group.inline label {
     display: inline;
@@ -165,13 +165,13 @@ body {
     padding: 15px;
     display: flex;
     align-items: center;
-    justify-content: flex-start; /* fixné/minimálne šírky pre tri sekcie */
+    justify-content: flex-start;
     gap: 10px;
 }
 
 /* Sekcia vľavo (názov banky) – fixná šírka */
 .bank-card-left {
-    min-width: 120px; /* uprav podľa potreby */
+    min-width: 120px;
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -203,16 +203,16 @@ body {
     justify-content: center;
 }
 
-/* Sekcia vpravo (tlačidlo / chybová hláška) – fixná šírka */
+/* Sekcia vpravo (tlačidlo/chybová hláška) – fixná šírka */
 .bank-card-right {
-    min-width: 160px; /* uprav podľa potreby */
+    min-width: 160px;
     text-align: right;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
 }
 
-/* Štýl pre úrok a splátku */
+/* Úrok a splátka */
 .bank-rate {
     font-size: 1.1rem;
     font-weight: 600;
@@ -223,7 +223,7 @@ body {
     margin-bottom: 10px;
 }
 
-/* Tlačidlo vpravo */
+/* Tlačidlo refinancovania */
 .btn-refinance {
     background-color: #000;
     color: #fff;
@@ -236,12 +236,12 @@ body {
     opacity: 0.9;
 }
 
-/* Chybová hláška vpravo */
+/* Chybová hláška – jednotné zarovnanie */
 .bank-status-error {
     color: #e00;
     font-weight: 600;
     margin-bottom: 5px;
-    display: inline-flex; /* inline-flex, aby ikona bola vedľa textu */
+    display: inline-flex;
     align-items: center;
     justify-content: flex-end;
     width: 100%;
@@ -264,18 +264,22 @@ body {
     border-radius: 4px;
     position: relative;
 }
+
+/* Tlačidlo na vymazanie konkrétneho úveru (textové tlačidlo) */
 .delete-loan {
     position: absolute;
     top: 8px;
     right: 8px;
-    background: transparent;
+    background: #e00;
+    color: #fff;
     border: none;
-    font-size: 1rem;
+    font-size: 0.9rem;
+    padding: 4px 8px;
+    border-radius: 4px;
     cursor: pointer;
-    color: #999;
 }
 .delete-loan:hover {
-    color: #000;
+    background: #c00;
 }
 
 /* RESPONSIVE */

@@ -4,14 +4,13 @@ document.addEventListener('DOMContentLoaded', function() {
      *******************************/
     const loansContainer = document.getElementById('loansContainer');
     const addLoanBtn = document.getElementById('addLoan');
+    const clearLoansBtn = document.getElementById('clearLoans');
 
     function createLoanBox() {
         const loanDiv = document.createElement('div');
         loanDiv.className = 'loan-box';
         loanDiv.innerHTML = `
-      <button class="delete-loan" title="Odstrániť úver">
-        <i class="fa fa-trash"></i>
-      </button>
+      <button class="delete-loan" title="Odstrániť tento úver">Vymazať úver</button>
       <div class="input-group">
         <label>Typ úveru:</label>
         <select class="loan-type">
@@ -47,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function() {
         loansContainer.appendChild(loanDiv);
     }
 
-    // Predvolene vytvor jeden úverový box
+    // Vytvor predvolene jeden úverový box, ak ešte nie sú
     if (loansContainer.children.length === 0) {
         createLoanBox();
     }
@@ -55,6 +54,13 @@ document.addEventListener('DOMContentLoaded', function() {
     addLoanBtn.addEventListener('click', () => {
         createLoanBox();
     });
+
+    // Tlačidlo na vymazanie všetkých úverov
+    if (clearLoansBtn) {
+        clearLoansBtn.addEventListener('click', () => {
+            loansContainer.innerHTML = '';
+        });
+    }
 
     /*******************************
      * Výpočet bankových ponúk pre refinancovanie
@@ -132,6 +138,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         refiBanks.forEach(bank => {
             const reasons = [];
+
             // Kontrola minimálnej doby splácania
             if (minDurationCategory < bank.minDuration) {
                 reasons.push("krátkej dobe splácania");
@@ -249,7 +256,6 @@ document.addEventListener('DOMContentLoaded', function() {
             cardRight.className = 'bank-card-right';
 
             if (qualifies) {
-                // Banka vyhovuje
                 eligibleCount++;
                 const rateEl = document.createElement('div');
                 rateEl.className = 'bank-rate';
@@ -270,20 +276,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
                 cardRight.appendChild(btnRefi);
             } else {
-                // Banka nevyhovuje
                 const statusEl = document.createElement('div');
                 statusEl.className = 'bank-status-error';
-
                 if (bank.name === "ČSOB") {
                     statusEl.textContent = "ČSOB už neposkytuje nikdy čisté refinancovanie";
                 } else {
                     statusEl.textContent = "nedá sa refinancovať bez overenia výšky príjmu";
                 }
-
                 const infoIcon = document.createElement('i');
                 infoIcon.className = "fa fa-info-circle";
                 infoIcon.title = `Kvôli ${reasons.join(" a ")}`;
-
                 statusEl.appendChild(infoIcon);
                 cardRight.appendChild(statusEl);
             }
